@@ -36,14 +36,17 @@ struct ContentView: View {
         .task {
             do {
                 user = try await getUser()
-            } catch GitHubAPIError.invalidURL {
-                print("invalid URL")
-            } catch GitHubAPIError.invalidResponse {
-                print("invalid Response")
-            } catch GitHubAPIError.invalidData {
-                print("invalid Data")
             } catch {
-                print("unexpected error")
+                switch error {
+                case GitHubAPIError.invalidURL:
+                    print("invalid URL")
+                case GitHubAPIError.invalidResponse:
+                    print("invalid Response")
+                case GitHubAPIError.invalidData:
+                    print("invalid Data")
+                default:
+                    print("unexpected error")
+                }
             }
             
         }
@@ -83,6 +86,9 @@ struct GitHubUser: Codable {
     let avatarUrl: String
     let bio: String
 }
+
+
+
 
 enum GitHubAPIError: Error {
     case invalidURL
